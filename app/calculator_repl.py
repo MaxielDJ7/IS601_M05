@@ -156,7 +156,7 @@ def calculator_repl():
                 print(f"Error: {e}")
                 continue
 
-    except Exception as e:
+    except Exception as e: # pragma: no cover
         # Handle fatal errors during initialization
         print(f"Fatal error: {e}")
         logging.error(f"Fatal error in calculator REPL: {e}")
