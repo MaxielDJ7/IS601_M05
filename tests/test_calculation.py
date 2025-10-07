@@ -1,5 +1,5 @@
 import pytest
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 from datetime import datetime
 from app.calculation import Calculation
 from app.exceptions import OperationError
@@ -130,3 +130,4 @@ def test_from_dict_result_mismatch(caplog):
 
     # Assert
     assert "Loaded calculation result 10 differs from computed result 5" in caplog.text
+
