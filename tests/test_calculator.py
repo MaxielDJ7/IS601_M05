@@ -178,3 +178,39 @@ def test_calculator_repl_help(mock_print, mock_input):
 def test_calculator_repl_addition(mock_print, mock_input):
     calculator_repl()
     mock_print.assert_any_call("\nResult: 5")
+
+@patch('app.calculator.pd.DataFrame.to_csv')
+def test_save_history_empty(mock_to_csv, calculator):
+    """Ensure empty history still creates a CSV with headers."""
+    calculator.history.clear()
+    calculator.save_history()
+    mock_to_csv.assert_called_once()
+
+
+def test_get_history_dataframe(calculator):
+    operation = OperationFactory.create_operation('add')
+    calculator.set_operation(operation)
+    calculator.perform_operation(2, 3)
+    df = calculator.get_history_dataframe()
+    assert not df.empty
+    assert 'operation' in df.columns
+
+def test_undo_and_redo_return_false_when_empty(calculator):
+    assert calculator.undo() is False
+    assert calculator.redo() is False
+
+
+def test_history_trims_to_max_size(calculator):
+    """Ensure the calculator trims old history entries when max size is exceeded."""
+    calculator.config.max_history_size = 2
+
+    calculator.set_operation(OperationFactory.create_operation('add'))
+
+    calculator.perform_operation(1, 1)
+    calculator.perform_operation(2, 2)
+    calculator.perform_operation(3, 3)
+
+    assert len(calculator.history) == 2
+    
+    assert calculator.history[0].operand1 == Decimal("2")
+    assert calculator.history[1].operand1 == Decimal("3")
