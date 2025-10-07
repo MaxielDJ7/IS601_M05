@@ -22,9 +22,9 @@ class TestOperation:
         """Test that string representation returns class name."""
         class TestOp(Operation):
             def execute(self, a: Decimal, b: Decimal) -> Decimal:
-                return a
+                return a # pragma: no cover
 
-        assert str(TestOp()) == "TestOp"
+        assert str(TestOp()) == "TestOp" 
 
 
 class BaseOperationTest:
@@ -212,7 +212,7 @@ class TestOperationFactory:
         """Test registering a new valid operation."""
         class NewOperation(Operation):
             def execute(self, a: Decimal, b: Decimal) -> Decimal:
-                return a
+                return a # pragma: no cover
 
         OperationFactory.register_operation("new_op", NewOperation)
         operation = OperationFactory.create_operation("new_op")
